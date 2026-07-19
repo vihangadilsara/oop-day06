@@ -11,19 +11,21 @@ class List{
 		addLast(data); //add(size(),data)
 	}
 	public void add(int index, int data){
-		Node n1=new Node(data);
-		if(index==0){
-			n1.next=first;
-			first=n1;
-		}else{
-			int count=0;
-			Node temp=first;
-			while(count<index-1){
-				count++;
-				temp=temp.next;
+		if(index>=0 && index<=size()){
+			Node n1=new Node(data);
+			if(index==0){
+				n1.next=first;
+				first=n1;
+			}else{
+				int count=0;
+				Node temp=first;
+				while(count<index-1){
+					count++;
+					temp=temp.next;
+				}
+				n1.next=temp.next;
+				temp.next=n1;
 			}
-			n1.next=temp.next;
-			temp.next=n1;
 		}
 	}
 	public void addLast(int data){
@@ -33,10 +35,10 @@ class List{
 		add(0,data);		
 	}
 	public void removeLast(){
-		remove(0);
+		remove(size()-1);
 	}
 	public void removeFirst(){
-		remove(size()-1);
+		remove(0);
 	}
 	public void remove(int index){
 		if(!isEmpty() && index>=0 && index<size()){
@@ -106,26 +108,32 @@ class List{
 class Demo{
 	public static void main(String args[]){
 		List intList=new List();
-		intList.add(100); //add(data)-->Insertion order[Queue]
-		intList.add(200);
-		intList.add(300);
-		intList.add(400);
-		intList.add(500);
-		intList.printList();//[100, 200, 300, 400, 500]
+		intList.add(100);
+		intList.printList(); //[100]
 		
-		intList.remove(2);
-		intList.printList();//[100, 200, 400, 500]
+		intList.clear();
+		intList.add(0,100);
+		intList.printList(); //[100]
+		
+		intList.clear();
+		intList.addFirst(100);
+		intList.printList(); //[100]
+		
+		intList.clear();
+		intList.addLast(100);
+		intList.printList(); //[100]
 		
 		intList.remove(0);
-		intList.printList();//[200, 400, 500]
-
-		intList.remove(intList.size()-1);
-		intList.printList();//[200, 400]
+		intList.printList(); //[empty]
 		
+		intList.add(100);
+		intList.printList(); //[100]
 		intList.removeFirst();
-		intList.printList();//[400]
+		intList.printList(); //[empty]
 		
+		intList.add(100);
+		intList.printList(); //[100]
 		intList.removeLast();
-		intList.printList();//[empty]
+		intList.printList(); //[empty]
 	}
 }

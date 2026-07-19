@@ -57,11 +57,15 @@ class StudentList{
             remove(index);
             return true;
         }
+        public boolean remove(String id){
+            Student s1=search(id);
+            return remove(s1);
+        }
 	public Student get(int index){
 		if(index>=0 && index<size()){
 			int count=0;
 			Node temp=first;
-			while(count<index-1){
+			while(count<index){
 				count++;
 				temp=temp.next;
 			}
@@ -76,7 +80,7 @@ class StudentList{
 			System.out.print(temp.student+", ");
 			temp=temp.next;
 		}
-		System.out.println(isEmpty() ?"empty]":"\b\b]");
+		System.out.println(isEmpty() ?"empty]":"\b\b}");
 	}
 	public int size(){
 		Node temp=first;
@@ -121,6 +125,7 @@ class StudentList{
 			if(temp.student.getId().equalsIgnoreCase(id)){
 				return temp.student;
 			}
+                        temp=temp.next;
 		}
 		return null;
 	}
@@ -129,4 +134,8 @@ class StudentList{
 		private Node next;
 		Node(Student student){this.student=student;}
 	}
+        public static void main(String[] args) {
+        
+            
+        }
 }

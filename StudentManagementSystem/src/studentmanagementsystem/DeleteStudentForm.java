@@ -4,8 +4,10 @@
  */
 package studentmanagementsystem;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,12 +19,12 @@ import javax.swing.JOptionPane;
  *
  * @author pc
  */
-public class UpdateStudentForm extends javax.swing.JFrame {
+public class DeleteStudentForm extends javax.swing.JFrame {
 
     /**
      * Creates new form AddStudentForm
      */
-    public UpdateStudentForm() {
+    public DeleteStudentForm() {
         initComponents();
     }
 
@@ -44,14 +46,14 @@ public class UpdateStudentForm extends javax.swing.JFrame {
         txtPrfMarks = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtDbmsMarks = new javax.swing.JTextField();
-        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Update Student Form");
+        jLabel1.setText("Delete Student Form");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Student ID");
@@ -78,11 +80,11 @@ public class UpdateStudentForm extends javax.swing.JFrame {
 
         txtDbmsMarks.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -124,7 +126,7 @@ public class UpdateStudentForm extends javax.swing.JFrame {
                         .addGap(0, 23, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnUpdate)
+                        .addComponent(btnDelete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancel)))
                 .addContainerGap())
@@ -152,7 +154,7 @@ public class UpdateStudentForm extends javax.swing.JFrame {
                     .addComponent(txtDbmsMarks, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdate)
+                    .addComponent(btnDelete)
                     .addComponent(btnCancel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -164,38 +166,31 @@ public class UpdateStudentForm extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        StudentList studentList=new StudentList();
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        BufferedReader br=null;
         try {
-            Scanner input=new Scanner(new File("Student.txt"));
-            while(input.hasNext()){
-                String row=input.nextLine();
-                String[] rowData=row.split(",");
-                Student student=new Student(rowData[0], rowData[1],Integer.parseInt(rowData[2]),Integer.parseInt(rowData[3]));
+            StudentList studentList=new StudentList();
+            br = new BufferedReader(new FileReader("Student.txt"));
+            String line=br.readLine();
+            while(line!=null){
+                String[] rowData=line.split(",");
+                Student student=new Student(rowData[0],rowData[1],Integer.parseInt(rowData[2]),Integer.parseInt(rowData[3]));
                 studentList.add(student);
-            }
+                line=br.readLine();
+            }   
+            studentList.remove(txtId.getText());
             studentList.printList();
-            for (int i = 0; i < studentList.size(); i++) {
-                if(studentList.get(i).getId().equalsIgnoreCase(txtId.getText())){
-                    studentList.get(i).setDbmsMarks(Integer.parseInt(txtDbmsMarks.getText()));
-                    studentList.get(i).setName(txtName.getText());
-                    studentList.get(i).setPrfMarks(Integer.parseInt(txtPrfMarks.getText()));
-               }
-            }
             FileWriter fileWriter=new FileWriter("Student.txt");
             for (int i = 0; i < studentList.size(); i++) {
-                Student student = studentList.get(i);
-                fileWriter.write(student.toString()+"\n");
+                fileWriter.write(studentList.get(i).toString()+"\n");
             }
             fileWriter.close();
-            JOptionPane.showMessageDialog(this, "Update Success");
-            
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(UpdateStudentForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeleteStudentForm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(UpdateStudentForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
+            Logger.getLogger(DeleteStudentForm.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         try {
@@ -220,7 +215,7 @@ public class UpdateStudentForm extends javax.swing.JFrame {
             }
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(UpdateStudentForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeleteStudentForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_txtIdActionPerformed
 
@@ -241,13 +236,13 @@ public class UpdateStudentForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UpdateStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UpdateStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UpdateStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UpdateStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DeleteStudentForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -257,14 +252,14 @@ public class UpdateStudentForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UpdateStudentForm().setVisible(true);
+                new DeleteStudentForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
